@@ -1,0 +1,82 @@
+- implicit conversions?
+- explicit conversions: int, bool, string
+- imports
+- assert; grammar: 'assert' BOOL_EXPR ',' STR_EXPR ';'
+- constants: 'val'
+- built-in collections
+- documentation function: doc/help, document user-defined functions with '///', but would need to update scanner not to
+  throw away comments
+- more useful stringification for functions: prettified(?) source code
+- creating functions etc. from strings: eval("fun(x, y) { return x + y; }")
+- custom operators
+- lambdas
+- "read" to read user input
+- loop as alias for while (true) like in Rust
+- Boehm GC as garbage collector
+- proper readline/libedit support
+- more built-in functions
+- more built-in types
+- module system
+- refactor checkKeyword function to eliminate length parameter
+- use stb_ds for dynamic arrays
+- set up testing and CI
+- 'const' *values* like Dart. e.g.:
+
+  ```lox
+  class Point {
+    init(x, y) {
+      this.x = x;
+      this.y = y;
+    }
+  }
+
+  var origin = const Point(0, 0);
+
+  origin.x = 1; // error
+  ```
+- call class's toString if defined
+- variadic functions, both provided by the language and user-defined
+
+  i added variadic functions to a fresh checkout of jlox, which was a piece of cake.
+
+  i experimented with a "listOf" function that takes a variable number of arguments and returns an ArrayList containing
+  them.
+
+  i also implemented "add" (variadic, to add multiple elements to a list at once), "remove" (monadic, to remove an
+  element by index), and "len" (monadic, to get the length of a list).
+- we could detect some incorrect uses of "add" and the other functions that will NEVER work using static analysis, after
+  the resolution phase.
+- allowing Lox to call into Java, like:
+
+  ```lox
+  // Calling a static method on a Java class
+  var result = javaCall("java.lang.Math", "sqrt", 16);
+  print result; // Outputs 4
+
+  // Instantiating a Java object
+  var date = javaNew("java.util.Date");
+  print javaCall(date, "toString"); // Outputs the current date as a string
+
+  // Calling an instance method
+  var list = javaNew("java.util.ArrayList");
+  javaCall(list, "add", "Hello");
+  javaCall(list, "add", "World");
+  print javaCall(list, "get", 0); // Outputs "Hello"
+  ```
+- i really want to use Pratt parsers, like https://journal.stuffwithstuff.com/2011/03/19/pratt-parsers-expression-parsing-made-easy/
+- ++ operator
+- tuples
+- records
+- gradual typing
+- pipeline operator |>
+
+- how we could define LoxCallable:
+
+  ```kotlin
+  abstract class LoxCallable {
+    abstract val arity: Int
+    abstract fun call(interpreter: Interpreter, arguments: List<Any?>): Any?
+
+    final override fun toString() = "<native fn>"
+  }
+  ```
