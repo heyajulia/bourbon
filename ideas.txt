@@ -80,3 +80,4 @@
     final override fun toString() = "<native fn>"
   }
   ```
+- arrow functions

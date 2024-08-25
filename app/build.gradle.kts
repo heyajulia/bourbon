@@ -26,9 +26,6 @@ dependencies {
     testImplementation(libs.junit.jupiter.engine)
 
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-
-    // This dependency is used by the application.
-    implementation(libs.guava)
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
@@ -40,10 +37,26 @@ java {
 
 application {
     // Define the main class for the application.
-    mainClass = "cool.julia.bourbon.MainKt"
+    mainClass = "cool.julia.bourbon.Lox"
 }
 
 tasks.named<Test>("test") {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()
+}
+
+tasks.withType<Jar> {
+    manifest {
+        attributes["Main-Class"] = application.mainClass
+    }
+
+    // From https://stackoverflow.com/a/61372736.
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    from(sourceSets.main.get().output)
+
+    dependsOn(configurations.runtimeClasspath)
+    from({
+        configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
+    })
 }
