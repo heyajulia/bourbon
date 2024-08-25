@@ -31,6 +31,13 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('main/**/*.gradle*', 'main/**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.pub-cache
+          key: ${{ runner.os }}-dart-${{ hashFiles('craftinginterpreters/tool/pubspec.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-dart-
       - name: Build bbn
         run: ./gradlew --no-daemon jar
         working-directory: ${{ github.workspace }}/main
