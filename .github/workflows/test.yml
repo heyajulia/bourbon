@@ -1,0 +1,43 @@
+name: Test
+on:
+  push:
+    branches:
+      - main
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: main
+      - uses: actions/checkout@v4
+        with:
+          repository: munificent/craftinginterpreters
+          ref: 4a840f70f69c6ddd17cfef4f6964f8e1bcd8c3d4
+          path: craftinginterpreters
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+      - uses: dart-lang/setup-dart@v1
+        with:
+          # The lower bound from https://github.com/munificent/craftinginterpreters/blob/4a840f70f69c6ddd17cfef4f6964f8e1bcd8c3d4/tool/pubspec.yaml#L4
+          sdk: "2.12"
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('main/**/*.gradle*', 'main/**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      - name: Build bbn
+        run: ./gradlew --no-daemon jar
+        working-directory: ${{ github.workspace }}/main
+      - name: Install test dependencies
+        run: make get
+        working-directory: ${{ github.workspace }}/craftinginterpreters
+      - name: Run tests
+        run: |
+          dart tool/bin/test.dart chap04_scanning --interpreter java --arguments -jar ${{ github.workspace }}/main/app/build/libs/app.jar
+        working-directory: ${{ github.workspace }}/craftinginterpreters
