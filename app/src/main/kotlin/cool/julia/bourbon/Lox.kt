@@ -9,13 +9,19 @@ object Lox {
     private var hadError = false
 
     @JvmStatic
-    fun main(args: Array<String>) = when (args.size) {
-        0 -> runPrompt()
-        1 -> runFile(args[0])
-        else -> {
-            println("Usage: bbn [script]")
-            exitProcess(64)
-        }
+    fun main(args: Array<String>) {
+        val expression: Expr = Expr.Binary(
+            Expr.Unary(
+                Token(TokenType.MINUS, "-", null, 1),
+                Expr.Literal(123)
+            ),
+            Token(TokenType.STAR, "*", null, 1),
+            Expr.Grouping(
+                Expr.Literal(45.67)
+            )
+        )
+
+        println(AstPrinter().print(expression))
     }
 
     private fun runFile(path: String) {
