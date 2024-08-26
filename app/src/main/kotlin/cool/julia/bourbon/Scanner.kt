@@ -39,10 +39,10 @@ class Scanner(private val source: String) {
             '=' -> addToken(if (match('=')) EQUAL_EQUAL else EQUAL)
             '<' -> addToken(if (match('=')) LESS_EQUAL else LESS)
             '>' -> addToken(if (match('=')) GREATER_EQUAL else GREATER)
-            '/' -> if (match('/')) {
-                while (!isAtEnd && peek() != '\n') advance()
-            } else {
-                addToken(SLASH)
+            '/' -> when {
+                match('/') -> eatLineComment()
+                match('*') -> eatBlockComment()
+                else -> addToken(SLASH)
             }
 
             ' ', '\r', '\t' -> {}
@@ -54,6 +54,29 @@ class Scanner(private val source: String) {
                 else -> Lox.error(line, "Unexpected character.")
             }
         }
+    }
+
+    private fun eatLineComment() {
+        while (!isAtEnd && peek() != '\n') advance()
+    }
+
+    private fun eatBlockComment() {
+        while (!isAtEnd) {
+            val c = peek()
+            val next = peekNext()
+
+            if (c == '\n') line++
+            if (c == '*' && next == '/') {
+                repeat(2) { advance() }
+
+                break
+            }
+            if (c == '/' && next == '*') Lox.error(line, "Nested block comments are not supported.")
+
+            advance()
+        }
+
+        if (isAtEnd) Lox.error(line, "Unterminated block comment.")
     }
 
     private fun string() {

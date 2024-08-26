@@ -1,0 +1,2 @@
+/* Block comments work now! */
+/* But nested block comments don't. /* Sorry! */ */
