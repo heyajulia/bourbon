@@ -1,0 +1,10 @@
+{
+  "lock": false,
+  "imports": {
+    "dedent": "https://esm.sh/v135/dedent@1.5.3",
+    "handlebars": "https://esm.sh/v135/handlebars@4.7.8"
+  },
+  "tasks": {
+    "generate": "deno run --allow-write=app/src/main/kotlin/cool/julia/bourbon/Expr.kt tool/generate-ast.ts"
+  }
+}
