@@ -63,7 +63,7 @@ class Scanner(private val source: String) {
         }
 
         if (isAtEnd) {
-            Lox.error(line, "Unterminated string")
+            Lox.error(line, "Unterminated string.")
             return
         }
 
