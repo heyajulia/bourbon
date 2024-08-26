@@ -68,7 +68,7 @@
 - tuples
 - records
 - gradual typing
-- pipeline operator |>
+- pipeline operator |> like in F#
 
 - how we could define LoxCallable:
 
@@ -81,3 +81,5 @@
   }
   ```
 - arrow functions
+- verbatim keywords (like `@` in C#)
+- nameof operator (like in C#)
