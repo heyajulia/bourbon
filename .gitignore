@@ -5,3 +5,6 @@
 build
 
 .idea
+
+# I don't know what this is, but it keeps reappearing
+app/bin
