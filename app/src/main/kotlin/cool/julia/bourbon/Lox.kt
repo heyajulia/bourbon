@@ -9,13 +9,35 @@ object Lox {
     private var hadError = false
 
     @JvmStatic
-    fun main(args: Array<String>) = when (args.size) {
-        0 -> runPrompt()
-        1 -> runFile(args[0])
-        else -> {
-            println("Usage: bbn [script]")
-            exitProcess(64)
-        }
+    fun main(args: Array<String>) {
+        val exprs = listOf(
+            Expr.Binary(
+                Expr.Grouping(
+                    Expr.Binary(
+                        Expr.Literal(1),
+                        Token(TokenType.PLUS, "+", null, 1),
+                        Expr.Literal(2)
+                    )
+                ),
+                Token(TokenType.STAR, "*", null, 1),
+                Expr.Grouping(
+                    Expr.Binary(
+                        Expr.Literal(4),
+                        Token(TokenType.MINUS, "-", null, 1),
+                        Expr.Literal(3)
+                    )
+                ),
+            ),
+            Expr.Binary(
+                Expr.Unary(Token(TokenType.MINUS, "-", null, 1), Expr.Literal(190)),
+                Token(TokenType.PLUS, "+", null, 1),
+                Expr.Literal(20)
+            )
+        )
+
+        val converter = RpnConverter()
+
+        exprs.map { converter.convert(it) }.forEach(::println)
     }
 
     private fun runFile(path: String) {
