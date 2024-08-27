@@ -1,10 +1,11 @@
 {
-  "lock": false,
   "imports": {
     "dedent": "https://esm.sh/v135/dedent@1.5.3",
     "handlebars": "https://esm.sh/v135/handlebars@4.7.8"
   },
+  "lock": false,
   "tasks": {
-    "generate": "deno run --allow-write=app/src/main/kotlin/cool/julia/bourbon/Expr.kt tool/generate-ast.ts"
+    "generate-ast": "deno run --allow-write=app/src/main/kotlin/cool/julia/bourbon/Expr.kt tool/generate-ast.ts",
+    "generate-deno-json": "dhall-to-json --explain --file deno.dhall --output deno.json"
   }
 }
